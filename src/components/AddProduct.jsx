@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
-import { db } from "../firebase";
-import { ref, push } from "firebase/database";
-
+import axios from "axios";
 
 function AddProduct({ showPopup, setShowPopup }) {
-  const [images, setImages] = useState([]);
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -13,6 +10,8 @@ function AddProduct({ showPopup, setShowPopup }) {
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [colors, setColors] = useState(["#000000"]);
   const [newColor, setNewColor] = useState("#ffffff");
+  const [images, setImages] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
 
   const toggleSize = (size) => {
     if (selectedSizes.includes(size)) {
@@ -36,7 +35,7 @@ function AddProduct({ showPopup, setShowPopup }) {
     setDescription("");
 
     setImages([]);
-
+    setImageUrls([]);
     setSelectedSizes([]);
 
     setColors(["#000000"]);
@@ -46,71 +45,73 @@ function AddProduct({ showPopup, setShowPopup }) {
     setShowPopup(false);
   };
 
-  const handleImages = (e) => {
+  const handleImages = async (e) => {
     const files = Array.from(e.target.files);
 
-    const newImages = files.map((file) => URL.createObjectURL(file));
+    const previews = files.map((file) => URL.createObjectURL(file));
 
-    setImages((prev) => [...prev, ...newImages].slice(0, 4));
+    setImages((prev) => [...prev, ...previews].slice(0, 4));
+
+    const uploadedUrls = [];
+
+    for (const file of files) {
+      const formData = new FormData();
+
+      formData.append("file", file);
+
+      const response = await axios.post(
+        "http://darkplanet.qzz.io/upload-image",
+        formData,
+      );
+
+      uploadedUrls.push(response.data.url);
+    }
+
+    setImageUrls((prev) => [...prev, ...uploadedUrls]);
   };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
+  // const handleDrop = (e) => {
+  //   e.preventDefault();
 
-    const files = Array.from(e.dataTransfer.files);
+  //   const files = Array.from(e.dataTransfer.files);
 
-    const newImages = files.map((file) => URL.createObjectURL(file));
+  //   // const newImages = files.map((file) => URL.createObjectURL(file));
 
-    setImages((prev) => [...prev, ...newImages].slice(0, 4));
-  };
+  //   //setImages((prev) => [...prev, ...newImages].slice(0, 4));
+  // };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+  // const handleDragOver = (e) => {
+  //   e.preventDefault();
+  // };
 
   const saveProduct = async () => {
-    if (!category.trim()) {
-      alert("Category Required");
-      return;
-    }
+    // if (images.length === 0) {
+    //   alert("Upload At Least 1 Image");
+    //   return;
+    // }
 
-    if (!name.trim()) {
-      alert("Product Name Required");
-      return;
-    }
-
-    if (images.length === 0) {
-      alert("Upload At Least 1 Image");
-      return;
-    }
-
-    if (selectedSizes.length === 0) {
-      alert("Select At Least 1 Size");
-      return;
-    }
-
-    const product = {
-      id: Date.now(),
-      category,
-      name,
-      price: Number(price) || 0,
-      offer: Number(offer) || 0,
-      description: description.trim() || "No Description Available",
-      images,
-      colors,
-      sizes: selectedSizes,
-      createdAt: Date.now(),
-    };
+    // if (imageUrls.length === 0) {
+    //   alert("Please wait for images to finish uploading");
+    //   return;
+    // }
 
     try {
-      await push(ref(db, "products"), product);
+      await axios.post("http://darkplanet.qzz.io/products", {
+        category,
+        name,
+        price: Number(price),
+        offer: Number(offer),
+        description,
+        sizes: selectedSizes,
+        colors,
+        images: imageUrls,
+      });
 
       alert("Product Added Successfully");
 
       closePopup();
     } catch (error) {
-      console.error(error);
-      alert("Failed To Save Product");
+      console.log(JSON.stringify(error.response?.data, null, 2));
     }
   };
 
@@ -365,8 +366,8 @@ function AddProduct({ showPopup, setShowPopup }) {
 
             {/* Upload Box */}
             <div
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
+              // onDrop={handleDrop}
+              // onDragOver={handleDragOver}
               className="
     h-45
     w-70

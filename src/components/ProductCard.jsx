@@ -14,8 +14,8 @@ return ( <div
    "
  >
 {/* Product Image */}
-<Link to={`/item?name=${encodeURIComponent(product.name)}`}> <img
-       src={product.images[0]}
+<Link to={`/item/${product.id}`}> <img
+       src={product.images?.[0]}
        alt={product.name}
        className="w-full h-70 object-cover"
      /> </Link>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Shop() {
   const navigate = useNavigate();
@@ -9,10 +10,18 @@ function Shop() {
   const [sortBy, setSortBy] = useState("Featured");
 
   useEffect(() => {
-    const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
-
-    setProducts(storedProducts);
+    fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("http://darkplanet.qzz.io/products");
+
+      setProducts(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const addToCart = (product) => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -47,7 +56,10 @@ function Shop() {
     startIndex + productsPerPage,
   );
 
-  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+  const totalPages = Math.max(
+  1,
+  Math.ceil(sortedProducts.length / productsPerPage)
+);
 
   return (
     <div className="bg-white min-h-screen px-6 py-8">
@@ -149,7 +161,7 @@ function Shop() {
 
         {/* Products */}
         <div className="lg:col-span-3">
-          <div className="grid md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleProducts.map((product) => (
               <div
                 key={product.id}
@@ -164,12 +176,12 @@ function Shop() {
                   src={product.images?.[0]}
                   alt={product.name}
                   onClick={() =>
-                    navigate(`/item?name=${encodeURIComponent(product.name)}`)
+                    navigate(`/item/${product.id}`)
                   }
                   className="
     w-full
     h-72
-    object-cover
+    object-contain
     rounded-lg
     cursor-pointer
   "
@@ -183,7 +195,7 @@ function Shop() {
 
                 <button
                   onClick={() =>
-                    navigate(`/item?name=${encodeURIComponent(product.name)}`)
+                    navigate(`/item/${product.id}`)
                   }
                   className="
     mt-3

@@ -1,9 +1,7 @@
 import { Package, Tags, Boxes, IndianRupee } from "lucide-react";
 import { useState, useEffect } from "react";
 import AddProduct from "../components/AddProduct";
-import { db } from "../firebase";
-import { ref, onValue } from "firebase/database";
-
+import axios from "axios";
 
 function Admin() {
   const [products, setProducts] = useState([]);
@@ -13,25 +11,18 @@ function Admin() {
   const productsPerPage = 3;
 
   useEffect(() => {
-  const productsRef = ref(db, "products");
+    fetchProducts();
+  }, []);
 
-  onValue(productsRef, (snapshot) => {
-    const data = snapshot.val();
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/products");
 
-    if (data) {
-      const productsArray = Object.entries(data).map(
-        ([firebaseId, product]) => ({
-          firebaseId,
-          ...product,
-        })
-      );
-
-      setProducts(productsArray);
-    } else {
-      setProducts([]);
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error loading products:", error);
     }
-  });
-}, []);
+  };
 
   const totalPages = Math.ceil(products.length / productsPerPage);
 

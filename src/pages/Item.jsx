@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function Item() {
-  const [searchParams] = useSearchParams();
+  const [product, setProduct] = useState(null);
 
-  const productName = searchParams.get("name");
-
-  const products = JSON.parse(localStorage.getItem("products")) || [];
-
-  const product = products.find((p) => p.name === productName);
-
+  const { id } = useParams();
   const [currentImage, setCurrentImage] = useState(0);
 
   const [reviews, setReviews] = useState([]);
@@ -22,33 +18,18 @@ function Item() {
   const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
-    if (!product) return;
+    fetchProduct();
+  }, [id]);
 
-    const savedReviews =
-      JSON.parse(localStorage.getItem(`reviews_${product.name}`)) || [];
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(`http://darkplanet.qzz.io/products/${id}`);
 
-    setReviews(savedReviews);
-  }, [product]);
-
-  useEffect(() => {
-    if (!product) return;
-
-    const interval = setInterval(() => {
-      setCurrentImage((prev) =>
-        prev >= product.images.length - 1 ? 0 : prev + 1,
-      );
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [product]);
-
-  if (!product) {
-    return (
-      <div className="bg-black min-h-screen flex items-center justify-center text-white text-3xl">
-        Product Not Found
-      </div>
-    );
-  }
+      setProduct(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const addToCart = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -102,6 +83,13 @@ function Item() {
     setReviewText("");
     setRating(5);
   };
+  if (!product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <>
@@ -268,7 +256,7 @@ function Item() {
 
             <p className="font-semibold mt-4">
               Category:
-              <span className="text-gray-600 ml-2">T-Shirts</span>
+              <span className="text-gray-600 ml-2">{product.category}</span>
             </p>
           </div>
         </div>

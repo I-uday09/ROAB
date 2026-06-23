@@ -25,9 +25,9 @@ function Hero() {
   className="
     relative
     w-full
-    aspect-[20/11]
-    md:aspect-[20/11]
-    lg:aspect-[20/11]
+    aspect-[20/10]
+    md:aspect-[20/10]
+    lg:aspect-[20/10]
     overflow-hidden
   "
 >
