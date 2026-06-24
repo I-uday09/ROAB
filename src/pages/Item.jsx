@@ -110,7 +110,7 @@ function Item() {
             <img
               src={product.images?.[currentImage] || ""}
               alt={product.name}
-              className="w-[100%] h-[550px] object-cover border border-gray-500 mx-auto"
+              className="w-[100%] h-[400px] object-fill border border-gray-500 mx-auto"
             />
 
             <div className="flex gap-3 mt-4 overflow-x-auto">

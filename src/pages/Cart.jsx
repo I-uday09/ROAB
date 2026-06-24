@@ -21,7 +21,6 @@ function Cart() {
 
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     window.dispatchEvent(new Event("cartUpdated"));
-    
   };
 
   const updateQuantity = (index, change) => {
@@ -69,7 +68,7 @@ function Cart() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-5">
           {/* Left Side */}
           <div className="lg:col-span-3">
             {/* Table Header */}
@@ -78,13 +77,13 @@ function Cart() {
               {/* Header */}
               <div
                 className="
-      grid
-      grid-cols-7
-      bg-gray-200
-      p-2
-      font-semibold
-      text-lg
-    "
+    hidden md:grid
+    grid-cols-7
+    bg-gray-200
+    p-2
+    font-semibold
+    text-lg
+  "
               >
                 <div>PRODUCT</div>
                 <div className="col-span-2"></div>
@@ -98,13 +97,16 @@ function Cart() {
                 <div
                   key={index}
                   className="
-        grid
-        grid-cols-7
-        items-center
-        p-2
-        border-t
-        border-gray-400
-      "
+  flex
+  flex-col
+  md:grid
+  md:grid-cols-7
+  gap-3
+  md:gap-0
+  p-4
+  border-t
+  border-gray-400
+"
                 >
                   {/* Image */}
                   <div>
@@ -112,12 +114,12 @@ function Cart() {
                       src={item.images?.[0] || ""}
                       alt={item.name}
                       className="
-            w-20
-            h-24
-            object-cover
-            border
-            border-gray-300
-          "
+w-16
+h-20
+md:w-20
+md:h-24
+object-cover
+"
                     />
                   </div>
 
@@ -135,10 +137,14 @@ function Cart() {
                   </div>
 
                   {/* Price */}
-                  <div className="font-bold text-lg">₹{item.price}</div>
+                  <div className="font-bold text-lg md:text-lg">
+                    <span className="md:hidden text-gray-500 mr-2">Price:</span>
+                    ₹{item.price}
+                  </div>
 
                   {/* Quantity */}
-                  <div className="col-span-2 flex justify-start">
+                  <div className="col-span-2 flex justify-start items-center gap-2">
+                    <span className="md:hidden text-gray-500">Qty:</span>
                     <div className="font-bold flex items-center border border-gray-300">
                       <button
                         onClick={() => updateQuantity(index, -1)}
@@ -175,7 +181,7 @@ function Cart() {
                   </div>
 
                   {/* Total */}
-                  <div className="flex items-center ">
+                  <div className="flex items-center justify-between md:justify-start">
                     <span className="font-semibold text-lg">
                       ₹{item.price * item.quantity}
                     </span>
