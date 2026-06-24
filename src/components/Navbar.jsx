@@ -7,15 +7,13 @@ import Sidebar from "./Sidebar";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const updateCartCount = () => {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      const count = cart.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
 
       setCartCount(count);
     };
@@ -25,10 +23,7 @@ function Navbar() {
     window.addEventListener("cartUpdated", updateCartCount);
 
     return () => {
-      window.removeEventListener(
-        "cartUpdated",
-        updateCartCount
-      );
+      window.removeEventListener("cartUpdated", updateCartCount);
     };
   }, []);
 
@@ -38,7 +33,6 @@ function Navbar() {
 
       <nav className="sticky top-0 z-30 bg-black border-b border-gray-800">
         <div className="h-16 md:h-20 px-4 md:px-10 flex items-center justify-between relative">
-          
           {/* Left Side */}
           <button
             onClick={() => setIsOpen(true)}
@@ -48,10 +42,7 @@ function Navbar() {
           </button>
 
           {/* Center Logo */}
-          <Link
-            to="/"
-            className="absolute left-1/2 -translate-x-1/2"
-          >
+          <Link to="/" className="absolute left-1/2 -translate-x-1/2">
             <img
               src={name}
               alt="ROAB"
@@ -66,8 +57,7 @@ function Navbar() {
 
           {/* Right Side */}
           <div className="flex items-center gap-3 md:gap-8">
-            
-
+      
             {/* Cart */}
             <Link
               to="/cart"

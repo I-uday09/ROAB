@@ -1,3 +1,4 @@
+import defaultProfile from "../assets/defaultProfile.png";
 import { Link } from "react-router-dom";
 import {
   X,
@@ -13,6 +14,12 @@ import {
 } from "lucide-react";
 
 function Sidebar({ isOpen, setIsOpen }) {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
   return (
     <>
       {/* Overlay */}
@@ -25,7 +32,7 @@ function Sidebar({ isOpen, setIsOpen }) {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-screen w-64 md:w-80 bg-black border-r border-gray-800 z-50 transition-transform duration-500 ${
+        className={`fixed top-0 left-0 h-screen w-64 md:w-80 bg-black border-r border-gray-800 z-50 transition-transform duration-500 overflow-y-auto ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -47,7 +54,7 @@ function Sidebar({ isOpen, setIsOpen }) {
         <div className="flex items-center gap-3 p-4 md:p-6 border-b border-gray-800">
           <div className="w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden bg-gray-700">
             <img
-              src="https://i.pravatar.cc/150"
+              src={defaultProfile}
               alt="Profile"
               className="w-full h-full object-cover"
             />
@@ -55,14 +62,16 @@ function Sidebar({ isOpen, setIsOpen }) {
 
           <div>
             <h3 className="text-white font-semibold text-sm md:text-lg">
-              User Name
+              {user?.name || "Guest User"}
             </h3>
 
-            <p className="text-gray-400 text-xs md:text-sm">user@email.com</p>
+            <p className="text-gray-400 text-xs md:text-sm">
+              {user?.username || "Not Logged In"}
+            </p>
           </div>
         </div>
 
-        {/* Navigation Links (Desktop Only) */}
+        {/* Navigation */}
         <div className="border-b border-gray-800 py-2">
           <Link
             to="/"
@@ -80,21 +89,38 @@ function Sidebar({ isOpen, setIsOpen }) {
             SHOP
           </Link>
 
-          <Link
-            to="/admin"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center px-6 py-4 text-white hover:bg-gray-900 hover:text-yellow-400 transition"
-          >
-            ADMIN
-          </Link>
+          {user?.role === "admin" && (
+            <Link
+              to="/admin"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center px-6 py-4 text-yellow-400 hover:bg-gray-900 transition"
+            >
+              ADMIN PANEL
+            </Link>
+          )}
         </div>
 
         {/* Menu */}
         <div className="py-2 md:py-4">
-          <button className="w-full flex items-center gap-3 md:gap-4 px-4 md:px-6 py-3 md:py-4 text-white hover:bg-gray-900 transition">
-            <User size={18} />
-            <span className="text-sm md:text-base">Profile</span>
-          </button>
+          {user ? (
+            <Link
+              to="/profile"
+              onClick={() => setIsOpen(false)}
+              className="w-full flex items-center gap-3 md:gap-4 px-4 md:px-6 py-3 md:py-4 text-white hover:bg-gray-900 transition"
+            >
+              <User size={18} />
+              <span className="text-sm md:text-base">Profile</span>
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="w-full flex items-center gap-3 md:gap-4 px-4 md:px-6 py-3 md:py-4 text-yellow-400 hover:bg-gray-900 transition"
+            >
+              <User size={18} />
+              <span className="text-sm md:text-base">Login</span>
+            </Link>
+          )}
 
           <button className="w-full flex items-center gap-3 md:gap-4 px-4 md:px-6 py-3 md:py-4 text-white hover:bg-gray-900 transition">
             <Package size={18} />
@@ -131,10 +157,24 @@ function Sidebar({ isOpen, setIsOpen }) {
             <span className="text-sm md:text-base">Help & Support</span>
           </button>
 
-          <button className="w-full flex items-center gap-3 md:gap-4 px-4 md:px-6 py-3 md:py-4 text-red-400 hover:bg-gray-900 transition">
-            <LogOut size={18} />
-            <span className="text-sm md:text-base">Logout</span>
-          </button>
+          {!user ? (
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 md:gap-4 px-4 md:px-6 py-3 md:py-4 text-yellow-400 hover:bg-gray-900 transition"
+            >
+              <User size={18} />
+              <span className="text-sm md:text-base">Login</span>
+            </Link>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 md:gap-4 px-4 md:px-6 py-3 md:py-4 text-red-400 hover:bg-gray-900 transition"
+            >
+              <LogOut size={18} />
+              <span className="text-sm md:text-base">Logout</span>
+            </button>
+          )}
         </div>
       </div>
     </>

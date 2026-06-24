@@ -11,7 +11,7 @@ function Email() {
           <img
             src={logo}
             alt="ROAB Logo"
-            className="w-64 md:w-80 object-contain"
+            className="w-36 sm:w-44 md:w-52 object-contain"
           />
         </div>
 

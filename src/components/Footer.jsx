@@ -7,20 +7,20 @@ return (
 <footer className="bg-gray-950 text-white border-t border-gray-800"> <div className="max-w-7xl mx-auto px-6 py-16">
 
 
-    <div className="grid md:grid-cols-4 gap-10">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-10">
 
       {/* Logo Section */}
-      <div className="md:border-r md:border-gray-700 md:pr-8">
+      <div className="flex flex-col items-center md:items-start text-center md:text-left md:border-r md:border-gray-700 md:pr-8">
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4">
 
           <img
             src={logo}
             alt="ROAB"
-            className="w-12 h-12 rounded-full object-cover border border-white/20"
+            className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border border-white/20"
           />
 
-          <h2 className="text-3xl font-bold text-white">
+          <h2 className="text-2xl md:text-3xl font-bold text-white">
             ROAB
           </h2>
 
@@ -31,11 +31,11 @@ return (
       {/* Quick Links */}
       <div className="md:border-r md:border-gray-700 md:pr-8">
 
-        <h3 className="text-xl font-bold mb-4">
+        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4">
           Quick Links
         </h3>
 
-        <ul className="space-y-3 text-gray-400">
+        <ul className="space-y-2 md:space-y-3 text-gray-400 text-sm md:text-base">
 
           <li>
             <a
@@ -127,7 +127,7 @@ return (
     {/* Bottom Footer */}
     <div className="mt-12 pt-6 text-center">
 
-      <p className="text-gray-500">
+      <p className="text-gray-500 text-xs md:text-sm">
         © 2026 ROAB Fashion. All Rights Reserved.
       </p>
 

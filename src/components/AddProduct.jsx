@@ -134,9 +134,11 @@ function AddProduct({ showPopup, setShowPopup }) {
     bg-black
     border
     border-gray-700
-    w-[1250px]
+    w-[95vw]
+    md:w-[1250px]
+    h-[95vh]
+    md:h-[600px]
     max-w-[95vw]
-    h-[600px]
     rounded-md
     overflow-hidden
     flex
@@ -173,14 +175,14 @@ function AddProduct({ showPopup, setShowPopup }) {
         </div>
 
         {/*DownBOx */}
-        <div className="flex flex-1">
+        <div className="flex flex-col md:flex-row flex-1 overflow-y-auto">
           {/* Left Side */}
-          <div className="w-[65%] p-8">
+          <div className="w-full md:w-[65%] p-4 md:p-8 order-2 md:order-1">
             <h3 className="text-white font-semibold mb-6">PRODUCT DETAILS</h3>
 
             <div className="space-y-5">
               {/* Category + Product Name */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-white text-sm mb-2">
                     Category
@@ -191,7 +193,7 @@ function AddProduct({ showPopup, setShowPopup }) {
                     onChange={(e) => setCategory(e.target.value)}
                     placeholder="Enter Category"
                     className="
-          w-70
+          w-full
           bg-gray-900
           text-white
           border
@@ -227,7 +229,7 @@ function AddProduct({ showPopup, setShowPopup }) {
               </div>
 
               {/* Colors + Sizes */}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-white text-sm mb-3">
                     Colors
@@ -290,7 +292,7 @@ function AddProduct({ showPopup, setShowPopup }) {
               </div>
 
               {/* Price + Offer */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-white text-sm mb-2">Price</label>
 
@@ -299,7 +301,7 @@ function AddProduct({ showPopup, setShowPopup }) {
                     onChange={(e) => setPrice(e.target.value)}
                     placeholder="₹ Enter Price"
                     className="
-          w-70
+          w-full
           bg-gray-900
           text-white
           border
@@ -321,7 +323,7 @@ function AddProduct({ showPopup, setShowPopup }) {
                     onChange={(e) => setOffer(e.target.value)}
                     placeholder="Enter Offer Percentage"
                     className="
-          w-40
+          w-full
           bg-gray-900
           text-white
           border
@@ -346,7 +348,7 @@ function AddProduct({ showPopup, setShowPopup }) {
                   placeholder="Product Description..."
                   className="
         w-full
-        h-30
+        h-25
         bg-gray-900
         text-white
         border
@@ -357,11 +359,28 @@ function AddProduct({ showPopup, setShowPopup }) {
       "
                 />
               </div>
+              <div className="flex md:hidden p-4 border-t border-gray-700">
+                {/* Save button for mobile */}
+                <button
+                  onClick={saveProduct}
+                  className="
+      w-50
+      bg-yellow-400
+      text-black
+      py-3
+      rounded
+      font-bold
+      ml-45
+    "
+                >
+                  SAVE PRODUCT
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Right Side */}
-          <div className="w-[35%] p-4 flex flex-col">
+          <div className="w-full md:w-[35%] p-4 flex flex-col order-1 md:order-2">
             <h3 className="text-white font-semibold mb-6">PRODUCT IMAGES</h3>
 
             {/* Upload Box */}
@@ -370,7 +389,7 @@ function AddProduct({ showPopup, setShowPopup }) {
               // onDragOver={handleDragOver}
               className="
     h-45
-    w-70
+    w-full
     border
     border-dashed
     border-yellow-300
@@ -431,25 +450,28 @@ function AddProduct({ showPopup, setShowPopup }) {
               ))}
             </div>
 
-            {/* Save Button */}
+            {/* Save Button for laptop*/}
             <button
               onClick={saveProduct}
               className="
-        w-[70%]
-        mt-6
-        bg-yellow-400
-        text-black
-        py-3
-        rounded
-        font-bold
-        hover:bg-yellow-300
-        transition
-        ml-18
-      "
+    hidden
+    md:block
+    w-[70%]
+    mt-6
+    bg-yellow-400
+    text-black
+    py-3
+    rounded
+    font-bold
+    hover:bg-yellow-300
+    transition
+    ml-18
+  "
             >
               SAVE PRODUCT
             </button>
           </div>
+          <div className="md:hidden p-4 border-t border-gray-700"></div>
         </div>
       </div>
     </div>

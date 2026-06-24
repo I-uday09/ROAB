@@ -2,8 +2,10 @@ import { Package, Tags, Boxes, IndianRupee } from "lucide-react";
 import { useState, useEffect } from "react";
 import AddProduct from "../components/AddProduct";
 import axios from "axios";
+import { Menu, ChevronLeft } from "lucide-react";
 
 function Admin() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
@@ -35,9 +37,19 @@ function Admin() {
 
   return (
     <>
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="fixed top-15 left-5 z-[60] bg-white text-yellow-400 p-1 rounded-lg shadow-lg"
+      >
+        {sidebarOpen ? <ChevronLeft size={22} /> : <Menu size={22} />}
+      </button>
       <div className="min-h-screen bg-gray-100 flex">
         {/* Sidebar */}
-        <aside className="w-50 bg-black text-white flex flex-col">
+        <aside
+          className={`fixed top-10 left-0 h-screen w-64 bg-black text-white z-50 transition-transform duration-300 ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
           <div className="p-8">
             <h1 className="text-4xl font-bold">ROAB</h1>
             <p className="text-yellow-400 tracking-[0.3em] mt-2">STORE</p>
@@ -74,13 +86,14 @@ function Admin() {
 
         <main className="flex-1 p-10">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold">PRODUCT MANAGER</h1>
-
-              <p className="text-gray-500 mt-2">
-                Manage all your products from here
-              </p>
+          <div className="flex justify-between items-start md:items-center mb-8">
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-3xl font-bold">PRODUCT MANAGER</h1>
+                <p className="text-gray-500 mt-2">
+                  Manage all your products from here
+                </p>
+              </div>
             </div>
 
             <button
@@ -98,7 +111,7 @@ function Admin() {
           </div>
           {/* Stats */}
 
-          <div className="grid grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {/* Total Products */}
             <div className="bg-white p-6 rounded-xl border flex items-center justify-between">
               <div>
@@ -154,31 +167,33 @@ function Admin() {
 
           {/* Product Table */}
 
-          <div className="bg-white rounded-xl border overflow-hidden">
+          <div className="bg-white rounded-xl border overflow-x-auto">
             {/* Header */}
-            <div className="grid grid-cols-12 bg-gray-100 p-4 font-semibold">
+            <div className="grid grid-cols-12 bg-gray-100 p-3 text-xs font-semibold">
               <div>#</div>
-              <div>IMAGE</div>
-              <div className="col-span-3">PRODUCT NAME</div>
+              <div className="col-span-2">IMAGE</div>
+              <div className="col-span-2">PRODUCT NAME</div>
               <div>PRICE</div>
               <div>STOCK</div>
               <div>COLOR</div>
               <div>SIZE</div>
-              <div className="col-span-2">ACTION</div>
+              <div>ACTION</div>
             </div>
 
             {currentProducts.map((item, index) => (
               <div
                 key={item.id}
-                className="grid grid-cols-12 items-center p-4 border-t"
+                className="grid grid-cols-12 items-center p-3 border-t text-sm"
               >
                 <div>{startIndex + index + 1}</div>
 
-                <img
-                  src={item.images?.[0]}
-                  alt=""
-                  className="w-16 h-20 object-cover rounded-lg"
-                />
+                <div className="col-span-2">
+                  <img
+                    src={item.images?.[0]}
+                    alt=""
+                    className="w-24 h-20 object-fill"
+                  />
+                </div>
 
                 <div className="col-span-3">
                   <h3 className="font-semibold">{item.name}</h3>
@@ -201,12 +216,12 @@ function Admin() {
 
                 <div>{item.size}</div>
 
-                <div className="col-span-2 flex gap-3">
-                  <button className="w-10 h-10 rounded-full bg-yellow-400 font-bold">
+                <div className="flex items-center gap-2">
+                  <button className="w-8 h-8 rounded-full bg-yellow-400 font-bold">
                     &gt;
                   </button>
 
-                  <button className="w-10 h-10 rounded-full bg-red-500 text-white font-bold">
+                  <button className="w-8 h-8 rounded-full bg-red-500 text-white font-bold">
                     ×
                   </button>
                 </div>
