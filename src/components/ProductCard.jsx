@@ -28,7 +28,7 @@ return ( <div
       {product.name}
     </h3>
 
-    <Link to={`/item?name=${encodeURIComponent(product.name)}`}>
+    <Link to={`/item/${product.id}`}>
       <button
         className="
           w-full
