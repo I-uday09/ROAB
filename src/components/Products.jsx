@@ -13,7 +13,7 @@ function Products() {
   const fetchProducts = async () => {
     try {
       const response = await axios.get(
-        "http://darkplanet.qzz.io/products"
+        "https://darkplanet.qzz.io/products"
       );
 
       setProducts(response.data);

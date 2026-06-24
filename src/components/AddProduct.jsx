@@ -60,7 +60,7 @@ function AddProduct({ showPopup, setShowPopup }) {
       formData.append("file", file);
 
       const response = await axios.post(
-        "http://darkplanet.qzz.io/upload-image",
+        "https://darkplanet.qzz.io/upload-image",
         formData,
       );
 
@@ -96,7 +96,7 @@ function AddProduct({ showPopup, setShowPopup }) {
     // }
 
     try {
-      await axios.post("http://darkplanet.qzz.io/products", {
+      await axios.post("https://darkplanet.qzz.io/products", {
         category,
         name,
         price: Number(price),

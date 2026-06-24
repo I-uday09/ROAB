@@ -23,7 +23,7 @@ function Item() {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`http://darkplanet.qzz.io/products/${id}`);
+      const response = await axios.get(`https://darkplanet.qzz.io/products/${id}`);
 
       setProduct(response.data);
     } catch (error) {
@@ -108,7 +108,7 @@ function Item() {
           {/* Images */}
           <div className="lg:col-span-2">
             <img
-              src={product.images[currentImage]}
+              src={product.images?.[currentImage] || ""}
               alt={product.name}
               className="w-[100%] h-[550px] object-cover border border-gray-500 mx-auto"
             />

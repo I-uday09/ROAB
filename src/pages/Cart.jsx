@@ -109,7 +109,7 @@ function Cart() {
                   {/* Image */}
                   <div>
                     <img
-                      src={item.images[0]}
+                      src={item.images?.[0] || ""}
                       alt={item.name}
                       className="
             w-20
