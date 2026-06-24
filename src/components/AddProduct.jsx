@@ -12,6 +12,7 @@ function AddProduct({ showPopup, setShowPopup }) {
   const [newColor, setNewColor] = useState("#ffffff");
   const [images, setImages] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
   const toggleSize = (size) => {
     if (selectedSizes.includes(size)) {
@@ -46,6 +47,7 @@ function AddProduct({ showPopup, setShowPopup }) {
   };
 
   const handleImages = async (e) => {
+    setUploading(true);
     const files = Array.from(e.target.files);
 
     const previews = files.map((file) => URL.createObjectURL(file));
@@ -84,6 +86,8 @@ function AddProduct({ showPopup, setShowPopup }) {
 
       return updated;
     });
+
+    setUploading(false);
   };
 
   // const handleDrop = (e) => {
@@ -101,6 +105,11 @@ function AddProduct({ showPopup, setShowPopup }) {
   // };
 
   const saveProduct = async () => {
+    if (uploading) {
+      alert("Please wait, images are still uploading");
+      return;
+    }
+
     console.log("imageUrls before save:", imageUrls);
 
     try {
@@ -370,6 +379,7 @@ function AddProduct({ showPopup, setShowPopup }) {
                 {/* Save button for mobile */}
                 <button
                   onClick={saveProduct}
+                  disabled={uploading}
                   className="
       w-50
       bg-yellow-400
@@ -380,7 +390,7 @@ function AddProduct({ showPopup, setShowPopup }) {
       ml-45
     "
                 >
-                  SAVE PRODUCT
+                  {uploading ? "UPLOADING..." : "SAVE PRODUCT"}
                 </button>
               </div>
             </div>
@@ -460,6 +470,7 @@ function AddProduct({ showPopup, setShowPopup }) {
             {/* Save Button for laptop*/}
             <button
               onClick={saveProduct}
+              disabled={uploading}
               className="
     hidden
     md:block
@@ -475,7 +486,7 @@ function AddProduct({ showPopup, setShowPopup }) {
     ml-18
   "
             >
-              SAVE PRODUCT
+              {uploading ? "UPLOADING..." : "SAVE PRODUCT"}              
             </button>
           </div>
           <div className="md:hidden p-4 border-t border-gray-700"></div>
