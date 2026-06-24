@@ -55,19 +55,35 @@ function AddProduct({ showPopup, setShowPopup }) {
     const uploadedUrls = [];
 
     for (const file of files) {
-      const formData = new FormData();
+      try {
+        const formData = new FormData();
 
-      formData.append("file", file);
+        formData.append("file", file);
 
-      const response = await axios.post(
-        "https://darkplanet.qzz.io/upload-image",
-        formData,
-      );
+        const response = await axios.post(
+          "https://darkplanet.qzz.io/upload-image",
+          formData,
+        );
 
-      uploadedUrls.push(response.data.url);
+        console.log("Upload Response:", response.data);
+
+        if (response.data?.url) {
+          uploadedUrls.push(response.data.url);
+        }
+      } catch (error) {
+        console.log("Upload Error:", error);
+      }
     }
 
-    setImageUrls((prev) => [...prev, ...uploadedUrls]);
+    console.log("Uploaded URLs:", uploadedUrls);
+
+    setImageUrls((prev) => {
+      const updated = [...prev, ...uploadedUrls];
+
+      console.log("New imageUrls:", updated);
+
+      return updated;
+    });
   };
 
   // const handleDrop = (e) => {
@@ -85,15 +101,7 @@ function AddProduct({ showPopup, setShowPopup }) {
   // };
 
   const saveProduct = async () => {
-    // if (images.length === 0) {
-    //   alert("Upload At Least 1 Image");
-    //   return;
-    // }
-
-    // if (imageUrls.length === 0) {
-    //   alert("Please wait for images to finish uploading");
-    //   return;
-    // }
+    console.log("imageUrls before save:", imageUrls);
 
     try {
       await axios.post("https://darkplanet.qzz.io/products", {
@@ -108,10 +116,9 @@ function AddProduct({ showPopup, setShowPopup }) {
       });
 
       alert("Product Added Successfully");
-
       closePopup();
     } catch (error) {
-      console.log(JSON.stringify(error.response?.data, null, 2));
+      console.log(error.response?.data);
     }
   };
 

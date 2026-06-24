@@ -1,0 +1,77 @@
+[1mdiff --git a/src/components/AddProduct.jsx b/src/components/AddProduct.jsx[m
+[1mindex 6b4ee16..cc2eb5f 100644[m
+[1m--- a/src/components/AddProduct.jsx[m
+[1m+++ b/src/components/AddProduct.jsx[m
+[36m@@ -55,19 +55,35 @@[m [mfunction AddProduct({ showPopup, setShowPopup }) {[m
+     const uploadedUrls = [];[m
+ [m
+     for (const file of files) {[m
+[31m-      const formData = new FormData();[m
+[32m+[m[32m      try {[m
+[32m+[m[32m        const formData = new FormData();[m
+ [m
+[31m-      formData.append("file", file);[m
+[32m+[m[32m        formData.append("file", file);[m
+ [m
+[31m-      const response = await axios.post([m
+[31m-        "https://darkplanet.qzz.io/upload-image",[m
+[31m-        formData,[m
+[31m-      );[m
+[32m+[m[32m        const response = await axios.post([m
+[32m+[m[32m          "https://darkplanet.qzz.io/upload-image",[m
+[32m+[m[32m          formData,[m
+[32m+[m[32m        );[m
+ [m
+[31m-      uploadedUrls.push(response.data.url);[m
+[32m+[m[32m        console.log("Upload Response:", response.data);[m
+[32m+[m
+[32m+[m[32m        if (response.data?.url) {[m
+[32m+[m[32m          uploadedUrls.push(response.data.url);[m
+[32m+[m[32m        }[m
+[32m+[m[32m      } catch (error) {[m
+[32m+[m[32m        console.log("Upload Error:", error);[m
+[32m+[m[32m      }[m
+     }[m
+ [m
+[31m-    setImageUrls((prev) => [...prev, ...uploadedUrls]);[m
+[32m+[m[32m    console.log("Uploaded URLs:", uploadedUrls);[m
+[32m+[m
+[32m+[m[32m    setImageUrls((prev) => {[m
+[32m+[m[32m      const updated = [...prev, ...uploadedUrls];[m
+[32m+[m
+[32m+[m[32m      console.log("New imageUrls:", updated);[m
+[32m+[m
+[32m+[m[32m      return updated;[m
+[32m+[m[32m    });[m
+   };[m
+ [m
+   // const handleDrop = (e) => {[m
+[36m@@ -85,15 +101,7 @@[m [mfunction AddProduct({ showPopup, setShowPopup }) {[m
+   // };[m
+ [m
+   const saveProduct = async () => {[m
+[31m-    // if (images.length === 0) {[m
+[31m-    //   alert("Upload At Least 1 Image");[m
+[31m-    //   return;[m
+[31m-    // }[m
+[31m-[m
+[31m-    // if (imageUrls.length === 0) {[m
+[31m-    //   alert("Please wait for images to finish uploading");[m
+[31m-    //   return;[m
+[31m-    // }[m
+[32m+[m[32m    console.log("imageUrls before save:", imageUrls);[m
+ [m
+     try {[m
+       await axios.post("https://darkplanet.qzz.io/products", {[m
+[36m@@ -108,10 +116,9 @@[m [mfunction AddProduct({ showPopup, setShowPopup }) {[m
+       });[m
+ [m
+       alert("Product Added Successfully");[m
+[31m-[m
+       closePopup();[m
+     } catch (error) {[m
+[31m-      console.log(JSON.stringify(error.response?.data, null, 2));[m
+[32m+[m[32m      console.log(error.response?.data);[m
+     }[m
+   };[m
+ [m
